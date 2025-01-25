@@ -1,0 +1,75 @@
+<h2>Create Invoice</h2>
+<form [formGroup]="invoiceForm" (ngSubmit)="onSubmit()" class="invoice-form">
+  <div class="invoice-details">
+    <mat-form-field appearance="fill">
+      <mat-label>Invoice Number</mat-label>
+      <input matInput formControlName="invoice_number" />
+      <mat-error *ngIf="invoiceForm.get('invoice_number')?.hasError('required')">
+        Invoice Number is required
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>From Name</mat-label>
+      <input matInput formControlName="from_name" />
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>From Address</mat-label>
+      <input matInput formControlName="from_address" />
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>To Name</mat-label>
+      <input matInput formControlName="to_name" />
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>To Address</mat-label>
+      <input matInput formControlName="to_address" />
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Invoice Date</mat-label>
+      <input matInput [matDatepicker]="picker" formControlName="invoice_date" />
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+  </div>
+
+  <div class="items-section">
+    <div formArrayName="items">
+      <div *ngFor="let item of items.controls; let i = index" [formGroupName]="i">
+        <mat-form-field appearance="fill">
+          <mat-label>Item Name</mat-label>
+          <input matInput formControlName="item_name" />
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+          <mat-label>Quantity</mat-label>
+          <input matInput formControlName="qty" type="number" (ngModelChange)="calculateItemTotal(i)" />
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+          <mat-label>Rate</mat-label>
+          <input matInput formControlName="rate" type="number" (ngModelChange)="calculateItemTotal(i)" />
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+          <mat-label>Total</mat-label>
+          <input matInput formControlName="total" type="number" [value]="calculateItemTotal(i)" readonly />
+        </mat-form-field>
+
+        <button mat-button (click)="removeItem(i)">Remove Item</button>
+      </div>
+    </div>
+
+    <button mat-button (click)="addItem()" [disabled]="items.length >= 2">Add Item</button>
+
+    <div>Total Amount: {{ totalAmount }}</div>
+  </div>
+
+  <button mat-raised-button color="primary" type="submit" [disabled]="invoiceForm.invalid">
+    Submit
+  </button>
+</form>

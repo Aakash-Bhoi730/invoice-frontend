@@ -1,0 +1,38 @@
+<div *ngIf="invoice">
+    <h2>Invoice Details</h2>
+  
+    <p><strong>Invoice Number:</strong> {{ invoice.invoice_number }}</p>
+    <p><strong>From Name:</strong> {{ invoice.from_name }}</p>
+    <p><strong>From Address:</strong> {{ invoice.from_address }}</p>
+    <p><strong>To Name:</strong> {{ invoice.to_name }}</p>
+    <p><strong>To Address:</strong> {{ invoice.to_address }}</p>
+    <p><strong>Invoice Date:</strong> {{ invoice.invoice_date | date }}</p>
+    <p><strong>Total Amount:</strong> {{ invoice.total_amount | currency:'INR' }}</p>
+  
+    <h3>Items</h3>
+    <table mat-table [dataSource]="items">
+      <ng-container matColumnDef="item_name">
+        <th mat-header-cell *matHeaderCellDef> Item Name </th>
+        <td mat-cell *matCellDef="let item"> {{ item.item_name }} </td>
+      </ng-container>
+  
+      <ng-container matColumnDef="qty">
+        <th mat-header-cell *matHeaderCellDef> Quantity </th>
+        <td mat-cell *matCellDef="let item"> {{ item.qty }} </td>
+      </ng-container>
+  
+      <ng-container matColumnDef="rate">
+        <th mat-header-cell *matHeaderCellDef> Rate </th>
+        <td mat-cell *matCellDef="let item"> {{ item.rate | currency:'INR' }} </td>
+      </ng-container>
+  
+      <ng-container matColumnDef="total">
+        <th mat-header-cell *matHeaderCellDef> Total </th>
+        <td mat-cell *matCellDef="let item"> {{ item.total | currency:'INR' }} </td>
+      </ng-container>
+  
+      <tr mat-header-row *matHeaderRowDef="['item_name', 'qty', 'rate', 'total']"></tr>
+      <tr mat-row *matRowDef="let row; columns: ['item_name', 'qty', 'rate', 'total'];"></tr>
+    </table>
+  </div>
+  
